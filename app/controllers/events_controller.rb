@@ -2,7 +2,7 @@
 
 # controller handle user events
 class EventsController < ApplicationController
-  EVENT_B = 'Create Event B'
+  EVENT_B = 'Initiate Event B'
   before_action :authenticate_user!
 
   def index
@@ -19,6 +19,9 @@ class EventsController < ApplicationController
 
   def create
     WIREMOCK_CLIENT.track(event_body)
+
+    # can be done using the background jobs but I intentionally not using it
+    NotifierMailer.with(email: current_user.email).email.deliver_now if event_name == User::EVENT_TYPE[0]
 
     redirect_to events_path, notice: 'Event has been Initiated Successfully'
   rescue StandardError

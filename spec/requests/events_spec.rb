@@ -57,12 +57,37 @@ RSpec.describe 'Events', type: :request do
         sign_in user
       end
 
-      it 'should intiate event a', vcr: true do
+      it 'should intiate event b', vcr: true do
         VCR.use_cassette('event_email_open') do
-          post events_path
+          post events_path, params: { commit: EventsController::EVENT_B }
 
           expect(response.status).to be(302)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(events_path)
+        end
+      end
+
+      it 'should intiate event b with email', vcr: true do
+        VCR.use_cassette('event_email_open') do
+          expect { post events_path, params: { commit: EventsController::EVENT_B } }.to change {
+                                                                                          ActionMailer::Base.deliveries.count
+                                                                                        }.by(1)
+        end
+      end
+
+      it 'should intiate event a', vcr: true do
+        VCR.use_cassette('event_email_other') do
+          post events_path, params: { commit: event_a }
+
+          expect(response.status).to be(302)
+          expect(response).to redirect_to(events_path)
+        end
+      end
+
+      it 'should not intiate event a with email', vcr: true do
+        VCR.use_cassette('event_email_other') do
+          expect { post events_path, params: { commit: event_a } }.to change {
+                                                                        ActionMailer::Base.deliveries.count
+                                                                      }.by(0)
         end
       end
     end

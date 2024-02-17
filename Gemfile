@@ -64,6 +64,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'webmock'
   gem 'vcr'
+  gem 'letter_opener'
 end
 
 gem 'rubocop'
