@@ -1,0 +1,1 @@
+WIREMOCK_CLIENT = IterableMock::Client.new
