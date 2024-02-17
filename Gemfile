@@ -67,3 +67,5 @@ end
 gem 'rubocop'
 
 gem "devise", "~> 4.9"
+
+gem 'rest-client'
