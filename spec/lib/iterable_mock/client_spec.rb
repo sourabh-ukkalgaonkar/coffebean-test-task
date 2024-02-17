@@ -7,7 +7,7 @@ RSpec.describe IterableMock::Client do
 
   it 'should track event', vcr: true do
     VCR.use_cassette('event_email_open') do
-      response = client.track(email_open_body)
+      response = client.track(email_open_event_body)
       expect(response).to be_truthy
       expect(response['msg']).to eq(email_open_success_msg)
     end
